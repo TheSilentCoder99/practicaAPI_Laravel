@@ -28,15 +28,15 @@ class RegisterRequest extends FormRequest
         // Este es el método que contiene las reglas. Solamente debes devolver el array con las características a validar y las reglas que éstas deben respetar.
         return [
             'name' => ['required', 'string', 'max:100'],
-            
+
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
 
             // Para esta práctica dejo que se pueda usar una contraseña simple pero se podrían agregar muchas otras reglas típicas para una contraseña segura. No hasheo la contraseña porque ya se hashea directamente en el modelo. Si lo haces, en ciertas ocasiones, se puede romper el hash.
             'password' => [
                 'required',
                 'string',
-                'confirmed',
-                Password::min(8),
+                'integer',
+                Password::min(8)
             ],
         ];
     }

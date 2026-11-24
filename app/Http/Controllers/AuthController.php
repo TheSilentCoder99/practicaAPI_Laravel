@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
@@ -17,7 +18,19 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {
+        // Creo el usuario
         $user = User::create($request->validated());
+
+        // Al usuario recién creado le creo un token inmediatamente
+        $token = $user->createToken('auth_token')->plainTextToken;
+        
+        // Devuelvo la respuesta correspondiente
+        return response()->json([
+            'message' => 'Usuario creado correctamente.',
+            'token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user,
+        ], 201);
     }
 
     /**
@@ -25,6 +38,8 @@ class AuthController extends Controller
      */
 public function login(LoginRequest $request)
 {
+    // Después de escribir todo esto descubrí que existe Auth:attemp, pero bueno, mejor deja tu propio código y ya está
+
     // Busco el usuario a través del email validado
     $user = User::where('email', $request->validated('email'))->first();
 
@@ -60,8 +75,12 @@ public function login(LoginRequest $request)
     /**
      * Cerrar sesión
      */
-    public function logout(string $id)
+    public function logout(Request $request)
     {
-        //
+        $tokenActual = $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+        'message' => 'Sesión cerrada correctamente.',
+    ], 200);
     }
 }
