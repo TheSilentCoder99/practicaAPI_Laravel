@@ -19,11 +19,10 @@ class CourseStudentSeeder extends Seeder
         // Student::pluck('id') devuelve solo la columna id de todos los alumnos: una colección [1, 2, 3, ..., 25].
         $studentIds = Student::pluck('id');
 
-        // De la colección de ids, devuelvo 25 al azar, quedando los otros 15 libres. Con esos 15 podrás probar el attach
-        $studentIds = $studentIds->random(25);
-
-        
         Course::all()->each(function (Course $course) use ($studentIds) {
+
+            // De la colección de ids, devuelvo 25 al azar, quedando los otros 15 libres. Con esos 15 podrás probar el attach
+            $studentIds = $studentIds->random(25);
             $course->students()->attach($studentIds);
         });
     }
