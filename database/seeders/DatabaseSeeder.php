@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,9 +17,13 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Aquí estoy llamando a los seeders, no a las clases
+      $this->call([
+        UserSeeder::class,
+        AcademySeeder::class,
+        CourseSeeder::class,
+        StudentSeeder::class,
+        CourseStudentSeeder::class,
+    ]);
     }
 }
