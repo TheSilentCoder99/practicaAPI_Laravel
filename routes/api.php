@@ -19,9 +19,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/store',[AcademyController::class,'store']);
     
-    Route::post('/update/{id}',[AcademyController::class,'update']);
+    Route::post('/update/{academy}',[AcademyController::class,'update']);
 
-    Route::post('/destroy/{id}',[AcademyController::class,'store']);
+    Route::post('/destroy/{academy}',[AcademyController::class,'store']);
 
 
 });
@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // Estas no va dentro del middleware porque obviamente no necesitas comprobar si el usuario tiene algún token para poder iniciar sesión o registrarte o ver todas las academias o una en concreto
 Route::get('/index', [AcademyController::class, 'index']);
 
-Route::get('/show/{id}',[AcademyController::class,'show']);
+Route::get('/show/{academy}',[AcademyController::class,'show']);
 
 
 Route::post('/register', [AuthController::class, 'register']);
