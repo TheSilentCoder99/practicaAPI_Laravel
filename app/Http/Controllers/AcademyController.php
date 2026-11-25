@@ -1,9 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Academy;
 use App\Http\Requests\StoreRequest;
+use App\Http\Requests\UpdateRequest;
+
 
 
 class AcademyController extends Controller
@@ -14,7 +15,6 @@ class AcademyController extends Controller
      */
     public function index()
     {
-
         $academias = Academy::all();
 
         return response()->json([
@@ -71,11 +71,14 @@ class AcademyController extends Controller
      * Update the specified resource in storage.
      * Actualizo una academia determinada
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, Academy $academy)
     {
-                return response()->json([
-        'message' => 'Funciona la ruta',
-    ], 200);
+        $academy->update($request->validated());
+
+        return response()->json([
+            'message' => 'Se ha actualizado la academia',
+            'data' => $academy
+        ], 200);
 
     }
 
@@ -83,10 +86,13 @@ class AcademyController extends Controller
      * Remove the specified resource from storage.
      * Elimino una academia determinada
      */
-    public function destroy(string $id)
+    public function destroy(Academy $academy)
     {
-                return response()->json([
-        'message' => 'Funciona la ruta',
+        $academy->delete();
+
+        return response()->json([
+        'message' => 'Se ha eliminado la academia',
+        'data' => $academy
     ], 200);
     }
 }

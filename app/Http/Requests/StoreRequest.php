@@ -14,9 +14,6 @@ class StoreRequest extends FormRequest
      */
    public function authorize()
 {
-    // Cuando tu ruta tiene un parámetro de ruta —por ejemplo PUT/PATCH /api/academies/{academy}— Laravel enlaza automáticamente el modelo si usas Route Model Binding (o deja el ID/valor en la ruta). Desde dentro del FormRequest, puedes acceder a ese parámetro con $this->route('academy'). O sea, puedo acceder al parámetro buscado así:
-    // $academy = $this->route('academy');
-
 
     // Permito la creación de una nueva academia solo si el usuario ha iniciado sesión
     return Auth::check();
