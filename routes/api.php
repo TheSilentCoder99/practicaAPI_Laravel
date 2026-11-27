@@ -1,42 +1,32 @@
 <?php
 
 use App\Http\Controllers\AcademyController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// Rutas públicas de autenticación
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-// Al crear las rutas, distingue qué endpoints son públicos y cuáles privados (los que van dentro del grupo de sanctum)
-// auth:sanctum hace una sola pregunta: ¿quién eres? Si el cliente no puede responderla, auth:sanctum corta la petición y el controlador ni se ejecuta.
+// Rutas públicas de academias (lectura)
+ Route::apiResource('academy', AcademyController::class)->only(['index','show']);
 
-
-
+// Rutas protegidas con Sanctum (requieren token Bearer)
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::post('/store',[AcademyController::class,'store']);
-    
-    Route::patch('/update/{academy}',[AcademyController::class,'update']);
+    // CRUD protegido de academias
+    Route::apiResource('academy', AcademyController::class);
 
-    Route::delete('/destroy/{academy}',[AcademyController::class,'destroy']);
+    // scopeBindings() garantiza que {course} pertenezca realmente a {academy}
+    Route::scopeBindings()->group(function () {
+    Route::apiResource('academies.courses', CourseController::class);
+    });
 
 });
-
-// Estas no van dentro del middleware porque no necesitas comprobar si el usuario tiene algún token para poder iniciar sesión o registrarte o ver todas las academias o una en concreto
-
-Route::post('/login', [AuthController::class, 'login']);
-
-Route::get('/index', [AcademyController::class, 'index']);
-
-Route::get('/show/{academy}',[AcademyController::class,'show']);
-
-Route::post('/register', [AuthController::class, 'register']);
-
-
-
-
-
