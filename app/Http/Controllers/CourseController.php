@@ -46,11 +46,9 @@ class CourseController extends Controller
     public function show(Academy $academy, Course $course)
     {
 
-    $EsteCurso = $academy->courses()->get($course);
-
         return response()->json([
         'message' => 'Datos del curso',
-        'datos' => $EsteCurso
+        'datos' => $course
     ], 200);
 
 
@@ -59,9 +57,18 @@ class CourseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCourseRequest $request, Course $course)
+    public function update(UpdateCourseRequest $request, Academy $academy, Course $course)
     {
         
+        $actualizacion = $request->validated();
+
+        $course->update($actualizacion);
+
+        return response()->json([
+        'message' => 'Curso actualizado correctamente.',
+        'datos' => $course
+        ], 200);
+
     }
 
     /**
@@ -71,7 +78,7 @@ class CourseController extends Controller
     // En rutas anidadas con {academy} y {course}, la firma del método debe declarar ambos parámetros en el orden que aparecen en la ruta:
     public function destroy(Academy $academy, Course $course){
 
-        $academy->courses()->delete($course);
+        $course->delete();
 
         return response()->json([
         'message' => 'Curso eliminado correctamente.',
